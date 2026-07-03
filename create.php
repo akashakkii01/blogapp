@@ -23,16 +23,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html>
-<head><title>Add Post</title></head>
+<head>
+    <title>Add Post</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
-    <h2>Add New Post</h2>
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4">Add New Post</h2>
     <form method="POST">
-        Title: <br>
-        <input type="text" name="title" required style="width: 300px;"><br><br>
-        Content: <br>
-        <textarea name="content" rows="5" cols="40" required></textarea><br><br>
-        <button type="submit">Save Post</button>
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea name="content" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Post</button>
+        <a href="posts.php" class="btn btn-secondary">Cancel</a>
     </form>
-    <p><a href="posts.php">Back to Posts</a></p>
+</div>
 </body>
 </html>

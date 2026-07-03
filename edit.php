@@ -14,7 +14,6 @@ if (!isset($_GET['id'])) {
 
 $id = $_GET['id'];
 
-// Handle form submission (update)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
     $content = $_POST['content'];
@@ -28,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 
-// Fetch existing post data to pre-fill the form
 $stmt = $conn->prepare("SELECT * FROM posts WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
@@ -44,16 +42,25 @@ if (!$post) {
 
 <!DOCTYPE html>
 <html>
-<head><title>Edit Post</title></head>
+<head>
+    <title>Edit Post</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 <body>
-    <h2>Edit Post</h2>
+<div class="container mt-5" style="max-width: 500px;">
+    <h2 class="mb-4">Edit Post</h2>
     <form method="POST">
-        Title: <br>
-        <input type="text" name="title" value="<?php echo htmlspecialchars($post['title']); ?>" required style="width: 300px;"><br><br>
-        Content: <br>
-        <textarea name="content" rows="5" cols="40" required><?php echo htmlspecialchars($post['content']); ?></textarea><br><br>
-        <button type="submit">Update Post</button>
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" value="<?php echo htmlspecialchars($post['title']); ?>" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Content</label>
+            <textarea name="content" class="form-control" rows="5" required><?php echo htmlspecialchars($post['content']); ?></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Post</button>
+        <a href="posts.php" class="btn btn-secondary">Cancel</a>
     </form>
-    <p><a href="posts.php">Back to Posts</a></p>
+</div>
 </body>
 </html>

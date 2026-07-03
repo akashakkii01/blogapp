@@ -26,3 +26,9 @@ Develop a simple PHP + MySQL web application to perform CRUD operations with bas
 2. Place project folder in `htdocs`
 3. Start Apache & MySQL via XAMPP
 4. Visit `localhost/blogapp/register.php` to create an account, then log in
+
+## Task 3 - Advanced Features
+- Added search functionality (search posts by title or content)
+- Added pagination (5 posts per page)
+- Improved UI using Bootstrap 5 (CDN)
+- Styled login, register, create, edit, and posts pages
