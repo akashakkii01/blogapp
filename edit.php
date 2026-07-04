@@ -13,18 +13,23 @@ if (!isset($_GET['id'])) {
 }
 
 $id = $_GET['id'];
+$error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
+    $title = trim($_POST['title']);
+    $content = trim($_POST['content']);
 
-    $stmt = $conn->prepare("UPDATE posts SET title = ?, content = ? WHERE id = ?");
-    $stmt->bind_param("ssi", $title, $content, $id);
-    $stmt->execute();
-    $stmt->close();
+    if (empty($title) || empty($content)) {
+        $error = "Title and content cannot be empty.";
+    } else {
+        $stmt = $conn->prepare("UPDATE posts SET title = ?, content = ? WHERE id = ?");
+        $stmt->bind_param("ssi", $title, $content, $id);
+        $stmt->execute();
+        $stmt->close();
 
-    header("Location: posts.php");
-    exit();
+        header("Location: posts.php");
+        exit();
+    }
 }
 
 $stmt = $conn->prepare("SELECT * FROM posts WHERE id = ?");
@@ -49,18 +54,35 @@ if (!$post) {
 <body>
 <div class="container mt-5" style="max-width: 500px;">
     <h2 class="mb-4">Edit Post</h2>
-    <form method="POST">
+
+    <?php if ($error !== ''): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+
+    <form method="POST" onsubmit="return validateForm()">
         <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" value="<?php echo htmlspecialchars($post['title']); ?>" required>
+            <input type="text" name="title" id="title" class="form-control" value="<?php echo htmlspecialchars($post['title']); ?>" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Content</label>
-            <textarea name="content" class="form-control" rows="5" required><?php echo htmlspecialchars($post['content']); ?></textarea>
+            <textarea name="content" id="content" class="form-control" rows="5" required><?php echo htmlspecialchars($post['content']); ?></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Update Post</button>
         <a href="posts.php" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+
+<script>
+function validateForm() {
+    const title = document.getElementById('title').value.trim();
+    const content = document.getElementById('content').value.trim();
+    if (title === '' || content === '') {
+        alert("Title and content cannot be empty.");
+        return false;
+    }
+    return true;
+}
+</script>
 </body>
 </html>

@@ -32,3 +32,11 @@ Develop a simple PHP + MySQL web application to perform CRUD operations with bas
 - Added pagination (5 posts per page)
 - Improved UI using Bootstrap 5 (CDN)
 - Styled login, register, create, edit, and posts pages
+
+
+## Task 4 - Security Enhancements
+- All database queries use prepared statements (mysqli) to prevent SQL injection
+- Added server-side validation for registration (username length/format, password length, duplicate check) and posts (empty field checks)
+- Added client-side validation (HTML5 attributes + JavaScript) for better UX
+- Added `role` column to users table (admin / editor)
+- Implemented role-based access control: only admins can delete posts; delete button and action are hidden/blocked for editors

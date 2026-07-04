@@ -7,8 +7,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Handle delete
+// Handle delete - admin only
 if (isset($_GET['delete'])) {
+    if ($_SESSION['role'] !== 'admin') {
+        die("Access denied. Only admins can delete posts.");
+    }
     $id = $_GET['delete'];
     $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
     $stmt->bind_param("i", $id);
@@ -63,7 +66,7 @@ $total_pages = ceil($totalRows / $posts_per_page);
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></h2>
+        <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?> (<?php echo htmlspecialchars($_SESSION['role']); ?>)</h2>
         <a href="logout.php" class="btn btn-outline-danger btn-sm">Logout</a>
     </div>
 
@@ -88,7 +91,9 @@ $total_pages = ceil($totalRows / $posts_per_page);
                 <p class="card-text"><?php echo htmlspecialchars($row['content']); ?></p>
                 <small class="text-muted">Posted on <?php echo $row['created_at']; ?></small><br><br>
                 <a href="edit.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-warning">Edit</a>
-                <a href="posts.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this post?')">Delete</a>
+                <?php if ($_SESSION['role'] === 'admin'): ?>
+                    <a href="posts.php?delete=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this post?')">Delete</a>
+                <?php endif; ?>
             </div>
         </div>
     <?php endwhile; ?>
